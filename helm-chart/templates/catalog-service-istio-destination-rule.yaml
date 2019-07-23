@@ -1,0 +1,13 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: catalog-service-catalog-staging-destination
+spec:
+  host: catalog-service.catalog-staging.svc.cluster.local
+  subsets:
+  - name: blue
+    labels:
+      deployment: catalog-service-blue
+  - name: green
+    labels:
+      deployment: catalog-service-green
