@@ -1,22 +1,19 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-    name: catalog-staging-catalog-service
+  name: catalog-staging-catalog-service
 spec:
-    hosts:
-        - catalog-service.catalog-staging.35.222.106.152.xip.io
-    gateways:
-        - catalog-staging-gateway
-    http:
-        -
-            route:
-                -
-                    destination:
-                        host: catalog-service.catalog-staging.svc.cluster.local
-                        subset: blue
-                    weight: 100
-                -
-                    destination:
-                        host: catalog-service.catalog-staging.svc.cluster.local
-                        subset: green
-                    weight: 0
+  gateways:
+  - catalog-staging-gateway
+  hosts:
+  - catalog-service.catalog-staging.35.222.106.152.xip.io
+  http:
+  - route:
+    - destination:
+        host: catalog-service.catalog-staging.svc.cluster.local
+        subset: blue
+      weight: 0
+    - destination:
+        host: catalog-service.catalog-staging.svc.cluster.local
+        subset: green
+      weight: 100
