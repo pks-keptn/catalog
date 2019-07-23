@@ -18,3 +18,43 @@ catalogService:
         internalPort: 8080
         name: catalog-service
         type: LoadBalancer
+catalogServiceBlue:
+    container:
+        name: catalog-service
+    image:
+        pullPolicy: IfNotPresent
+        repository: null
+        tag: null
+    replicaCount: 1
+    resources:
+        limits:
+            cpu: 100m
+            memory: 128Mi
+        requests:
+            cpu: 100m
+            memory: 128Mi
+    service:
+        externalPort: 80
+        internalPort: 8080
+        name: catalog-service-blue
+        type: LoadBalancer
+catalogServiceGreen:
+    container:
+        name: catalog-service
+    image:
+        pullPolicy: IfNotPresent
+        repository: null
+        tag: null
+    replicaCount: 1
+    resources:
+        limits:
+            cpu: 100m
+            memory: 128Mi
+        requests:
+            cpu: 100m
+            memory: 128Mi
+    service:
+        externalPort: 80
+        internalPort: 8080
+        name: catalog-service-green
+        type: LoadBalancer
