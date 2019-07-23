@@ -1,0 +1,13 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: catalog-dev-catalog-service
+spec:
+  hosts:
+  - "catalog-service.catalog-dev.35.222.106.152.xip.io"
+  gateways:
+  - catalog-dev-gateway
+  http:
+    - route:
+      - destination:
+          host: catalog-service.catalog-dev.svc.cluster.local
