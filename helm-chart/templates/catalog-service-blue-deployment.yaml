@@ -1,0 +1,61 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: catalog-service-blue
+  labels:
+    app: {{ .Chart.Name }}-selector-catalog-service
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: {{ .Values.catalogServiceBlue.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}-selector-catalog-service
+        deployment: catalog-service-blue
+    spec:
+      containers:
+      - name: {{ .Values.catalogServiceBlue.container.name }}
+        image: "{{ .Values.catalogServiceBlue.image.repository }}:{{ .Values.catalogServiceBlue.image.tag }}"
+        imagePullPolicy: {{ .Values.catalogServiceBlue.image.pullPolicy }}
+        env:
+        - name: DT_TAGS
+          value: "application={{ .Chart.Name }}"
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: "metadata.name"
+        - name: DEPLOYMENT_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: "metadata.labels['deployment']"
+        - name: CONTAINER_IMAGE
+          value: "{{ .Values.catalogServiceBlue.image.repository }}:{{ .Values.catalogServiceBlue.image.tag }}"
+        - name: KEPTN_PROJECT
+          value: "{{ .Chart.Name }}"
+        - name: KEPTN_STAGE
+          valueFrom:
+            fieldRef:
+              fieldPath: "metadata.namespace"
+        - name: KEPTN_SERVICE
+          value: "{{ .Values.catalogServiceBlue.service.name }}"
+        ports:
+        - name: internalport
+          containerPort: {{ .Values.catalogServiceBlue.service.internalPort }}
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 15
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 15
+        resources:
+{{ toYaml .Values.resources | indent 12 }}
